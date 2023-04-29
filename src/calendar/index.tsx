@@ -65,6 +65,7 @@ export interface CalendarProps extends CalendarHeaderProps, DayProps {
   allowSelectionOutOfRange?: boolean;
 
   onLayout?: any; 
+  onBeforeLayoutHeightChange?: any;
 }
 
 /**
@@ -97,6 +98,7 @@ const Calendar = (props: CalendarProps & ContextProp) => {
     importantForAccessibility,
     testID,
     onLayout,
+    onBeforeLayoutHeightChange,
     style: propsStyle
   } = props;
   const [currentMonth, setCurrentMonth] = useState(current || initialDate ? parseDate(current || initialDate) : new XDate());
@@ -227,6 +229,7 @@ const Calendar = (props: CalendarProps & ContextProp) => {
     if (props.showWeekNumbers) {
       week.unshift(renderWeekNumber(days[days.length - 1].getWeek()));
     }
+  
 
     return (
       <View style={style.current.week} key={id}>
@@ -243,7 +246,9 @@ const Calendar = (props: CalendarProps & ContextProp) => {
     while (days.length) {
       weeks.push(renderWeek(days.splice(0, 7), weeks.length));
     }
-
+    // onBeforeLayoutHeightChange Before render the calendar
+    // 73 is header height, 46 is each week row height measured by onLayout
+    onBeforeLayoutHeightChange?.(73 + weeks.length * 46)
     return <View style={style.current.monthView}>{weeks}</View>;
   };
 
