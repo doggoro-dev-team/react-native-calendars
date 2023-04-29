@@ -63,6 +63,8 @@ export interface CalendarProps extends CalendarHeaderProps, DayProps {
   customHeader?: any;
   /** Allow selection of dates before minDate or after maxDate */
   allowSelectionOutOfRange?: boolean;
+
+  onLayout?: any; 
 }
 
 /**
@@ -94,6 +96,7 @@ const Calendar = (props: CalendarProps & ContextProp) => {
     accessibilityElementsHidden,
     importantForAccessibility,
     testID,
+    onLayout,
     style: propsStyle
   } = props;
   const [currentMonth, setCurrentMonth] = useState(current || initialDate ? parseDate(current || initialDate) : new XDate());
@@ -163,11 +166,10 @@ const Calendar = (props: CalendarProps & ContextProp) => {
 
     switch (gestureName) {
       case SWIPE_UP:
-      case SWIPE_DOWN:
-        break;
       case SWIPE_LEFT:
         constants.isRTL ? onSwipeRight() : onSwipeLeft();
         break;
+      case SWIPE_DOWN:
       case SWIPE_RIGHT:
         constants.isRTL ? onSwipeLeft() : onSwipeRight();
         break;
@@ -287,6 +289,7 @@ const Calendar = (props: CalendarProps & ContextProp) => {
         testID={testID}
         accessibilityElementsHidden={accessibilityElementsHidden} // iOS
         importantForAccessibility={importantForAccessibility} // Android
+        onLayout={onLayout}
       >
         {renderHeader()}
         {renderMonth()}
