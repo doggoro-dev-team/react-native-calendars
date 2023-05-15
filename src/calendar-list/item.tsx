@@ -1,6 +1,6 @@
 import XDate from 'xdate';
 import React, {useRef, useMemo, useCallback} from 'react';
-import {Text} from 'react-native';
+import {Text, ActivityIndicator, View} from 'react-native';
 import {Theme} from '../types';
 import {toMarkingFormat} from '../interface';
 import {extractCalendarProps} from '../componentUpdater';
@@ -49,7 +49,8 @@ const CalendarListItem = React.memo((props: CalendarListItemProps) => {
   }, [calendarWidth, calendarHeight, propsStyle]);
   
   const textStyle = useMemo(() => {
-    return [calendarStyle, style.current.placeholderText];
+    return [calendarStyle, { justifyContent: 'center',
+    alignItems: 'center' } , style.current.placeholderText];
   }, [calendarStyle]);
   
   const _onPressArrowLeft = useCallback((method: () => void, month?: XDate) => {
@@ -83,7 +84,9 @@ const CalendarListItem = React.memo((props: CalendarListItemProps) => {
 
   if (!visible) {
     return (
-      <Text style={textStyle}>{dateString}</Text>
+      <View style={textStyle}>
+        <ActivityIndicator />
+      </View>
     );
   }
 
