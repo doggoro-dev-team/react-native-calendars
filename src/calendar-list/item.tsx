@@ -15,6 +15,7 @@ export type CalendarListItemProps = CalendarProps & {
   theme?: Theme;
   scrollToMonth?: (date: XDate) => void;
   visible?: boolean;
+  renderLoadingComp?: () => any
 };
 
 const CalendarListItem = React.memo((props: CalendarListItemProps) => {  
@@ -29,7 +30,8 @@ const CalendarListItem = React.memo((props: CalendarListItemProps) => {
     headerStyle,
     onPressArrowLeft,
     onPressArrowRight,
-    visible
+    visible,
+    renderLoadingComp
   } = props;
 
   const style = useRef(styleConstructor(theme));
@@ -51,6 +53,11 @@ const CalendarListItem = React.memo((props: CalendarListItemProps) => {
   const textStyle = useMemo(() => {
     return [calendarStyle, { justifyContent: 'center',
     alignItems: 'center' } , style.current.placeholderText];
+  }, [calendarStyle]);
+
+  const loadingStyle = useMemo(() => {
+    return [calendarStyle, { justifyContent: 'center',
+    alignItems: 'center' }, ];
   }, [calendarStyle]);
   
   const _onPressArrowLeft = useCallback((method: () => void, month?: XDate) => {
@@ -84,8 +91,8 @@ const CalendarListItem = React.memo((props: CalendarListItemProps) => {
 
   if (!visible) {
     return (
-      <View style={textStyle}>
-        <ActivityIndicator />
+      <View style={loadingStyle}>
+        {renderLoadingComp ? renderLoadingComp() : <ActivityIndicator />}
       </View>
     );
   }
